@@ -1,5 +1,5 @@
 # Voxel-Printer-for-Crayta
-Print any 3D model, from it's individual voxel positions, allowing custom import of models as plain text. Uses the SetVoxel()  from the Crayta API
+Print any 3D model, from it's individual voxel positions, allowing custom import of models as plain text. Uses the SetVoxel() from the Crayta API. This is the 5th iteration of the voxelprinter that works in Crayta, made with MightyKho (kudosharing).
 
 # Convert 3D model
 Take your desired 3D model and convert it to the voxel geometry data. This can be done with Blender, or Voxelizer https://drububu.com/miscellaneous/voxelizer/index.html
