@@ -1,0 +1,48 @@
+local PrinterScript = {}
+local PX = 25
+
+-- Script properties are defined here
+PrinterScript.Properties = {
+	-- Example property
+	--{name = "health", type = "number", tooltip = "Current health", default = 100},
+	{name = "modelScript", type = "scriptasset"},
+	{name = "chunkSize", type = "number", min = 0, max = 500, default = 400},
+	{name = "voxelSize", type = "number", min = 1, default = 1},
+	{name = "material", type = "voxelasset"}
+}
+
+--This function is called on the server when this entity is created
+function PrinterScript:Init()
+	self:Schedule(function()
+		self:Print()	
+	end)
+end
+
+function PrinterScript:Print()
+	local script = self:GetEntity():FindScript(self.properties.modelScript)
+	
+	local chunkSize = self.properties.chunkSize
+	local voxelSize = self.properties.voxelSize * PX
+	
+	local voxelsCount = #script.data / 3
+	local chunksCount = math.ceil(voxelsCount / chunkSize)
+	
+	local scale = Vector.New(1,1,1) * voxelSize
+	
+	for u = 1, chunksCount do -- iterating over chunks
+		for v = (u - 1) * chunkSize, u * chunkSize do -- iterating over coordinates of the chunk
+			local x = script.data[v * 3 + 1]
+			local y = script.data[v * 3 + 2]
+			local z = script.data[v * 3 + 3]
+			if not x then break end -- we are in the last chunk and we ran out of coordinates
+			
+			local pos = Vector.New(x, y, z) * voxelSize
+			
+			self:GetEntity():SetVoxelBox(pos, scale, self.properties.material)
+		end
+		
+		Wait(0.1)
+	end
+end
+
+return PrinterScript
